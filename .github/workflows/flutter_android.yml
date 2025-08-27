@@ -6,11 +6,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest  # Optimisé pour macOS
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -19,14 +19,19 @@ jobs:
         with:
           flutter-version: '3.19.5'
           channel: 'stable'
+          architecture: x64  # Important pour macOS
 
-      - name: Install Android dependencies
+      - name: Install Android SDK
         run: |
-          sudo apt-get update
-          sudo apt-get install -y lib32stdc++6
+          brew install --cask android-commandlinetools
+          echo "y" | sdkmanager --install "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses
 
       - name: Create key.properties
         run: |
+          mkdir -p android
           echo "storePassword=\${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/key.properties
           echo "keyPassword=\${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=\${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
@@ -34,16 +39,17 @@ jobs:
 
       - name: Decode Keystore
         run: |
+          mkdir -p android/app
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/helloworld-keystore.jks
 
-      - name: Get Flutter dependencies
+      - name: Get dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --verbose
 
       - name: Upload APK
         uses: actions/upload-artifact@v4  # Version corrigée
         with:
-          name: app-release
+          name: app-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
