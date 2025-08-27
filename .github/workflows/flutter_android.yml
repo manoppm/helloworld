@@ -10,9 +10,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.5'  # Remplace par ta version
+          flutter-version: '3.19.5'
+          channel: 'stable'
+
+      - name: Install Android dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lib32stdc++6
 
       - name: Create key.properties
         run: |
@@ -25,11 +36,14 @@ jobs:
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/helloworld-keystore.jks
 
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
       - name: Build APK
         run: flutter build apk --release
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # Version corrigée
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
