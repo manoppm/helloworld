@@ -26,3 +26,7 @@
 .idea/
 *.swp
 *.swo
+android/key.properties
+android/app/*.jks
+*.jks
+keystore.base64
