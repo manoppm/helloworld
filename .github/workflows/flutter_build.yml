@@ -21,14 +21,16 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.5'
-          channel: 'stable'
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Create keystore directory
+        run: mkdir -p android/app
 
       - name: Create keystore file
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/helloworld-keystore.jks
+
+      - name: Install dependencies
+        run: flutter pub get
 
       - name: Build APK
         run: flutter build apk --release
@@ -36,7 +38,7 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEYSTORE_PATH: ../app/helloworld-keystore.jks
+          ANDROID_KEYSTORE_PATH: android/app/helloworld-keystore.jks  # ← Chemin corrigé
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
