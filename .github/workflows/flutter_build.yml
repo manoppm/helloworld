@@ -1,54 +1,48 @@
-name: Flutter Build & Release
+name: Flutter Build
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout du code
+      uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+    - name: Configuration Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
 
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.5'
-          channel: 'stable'
+    - name: Installation Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: '9477386'
-          packages: |
-            platforms;android-34
-            build-tools;34.0.0
-            platform-tools
+    - name: Vérification de Flutter
+      run: flutter doctor -v
 
-      - name: Create key.properties
-        run: |
-          mkdir -p android
-          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > android/key.properties
-          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
-          echo "storeFile=../app/helloworld-keystore.jks" >> android/key.properties
+    - name: Installation des dépendances
+      run: flutter pub get
 
-      - name: Decode keystore
-        run: |
-          mkdir -p android/app
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/helloworld-keystore.jks
+    - name: Analyse du code
+      run: flutter analyze
 
-      - name: Build APK
-        run: flutter build apk --release --verbose
+    - name: Tests unitaires
+      run: flutter test
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+    - name: Construction APK Debug
+      run: flutter build apk --debug
+
+    - name: Upload de l'artefact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-debug-apk
+        path: build/app/outputs/flutter-apk/app-debug.apk

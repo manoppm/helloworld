@@ -34,3 +34,20 @@ android/key.properties
 android/app/*.jks
 *.jks
 keystore.base64
+
+# Android keystore files
+*.jks
+*.keystore
+android/key.properties
+
+# Build outputs
+build/
+.dart_tool/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
