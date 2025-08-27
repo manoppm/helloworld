@@ -1,4 +1,4 @@
-# Flutter/Dart
+# Dart/Flutter
 **.dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -6,17 +6,27 @@
 /build/
 /android/.gradle/
 /android/app/build/
-
-# Android
-**/android/**/gradle-wrapper.properties
+/android/app/.idea/
+/android/app/**/debug/
+/android/app/**/profile/
 
 # iOS
-**/ios/**/*.mode1v3
-**/ios/**/*.moved-aside
-**/ios/**/*.pbxuser
-**/ios/**/*.perspectivev3
-**/ios/**/Pods/
-**/ios/**/*.xcworkspace
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/App.framework
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/app.flx
+/ios/Flutter/app.zip
+/ios/Flutter/Flutter.podspec
+/ios/ServiceDefinitions.json
+/ios/Runner/GeneratedPluginRegistrant.*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.lock
 
 # Environnement
 .env

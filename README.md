@@ -1,16 +1,39 @@
-# helloworld
+# Hellworld Flutter App
 
-A new Flutter project.
+[![Android CI/CD](https://github.com/votre-utilisateur/helloworld/actions/workflows/flutter_android.yml/badge.svg)](https://github.com/votre-utilisateur/helloworld/actions/workflows/flutter_android.yml)
+[![iOS CI/CD](https://github.com/votre-utilisateur/helloworld/actions/workflows/flutter_ios.yml/badge.svg)](https://github.com/votre-utilisateur/helloworld/actions/workflows/flutter_ios.yml)
 
-## Getting Started
+## Description
+Projet Flutter avec CI/CD automatisé pour Android et iOS.
 
-This project is a starting point for a Flutter application.
+## Prérequis
+- Flutter 3.19.5
+- Android SDK 33
+- CocoaPods (pour iOS)
 
-A few resources to get you started if this is your first Flutter project:
+## Installation
+1. Cloner le dépôt :
+   \`\`\`bash
+   git clone git@github.com:votre-utilisateur/helloworld.git
+   cd helloworld
+   \`\`\`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. Installer les dépendances :
+   \`\`\`bash
+   flutter pub get
+   cd ios && pod install && cd ..
+   \`\`\`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. Lancer l'app :
+   \`\`\`bash
+   flutter run -d all
+   \`\`\`
+
+## CI/CD
+- **Android** : Build automatisé via GitHub Actions (APK généré à chaque push sur \`main\`).
+- **iOS** : Build via Codemagic (IPA généré et envoyé par email).
+
+## Artefacts
+Les builds sont disponibles dans :
+- [GitHub Actions (Android)](https://github.com/votre-utilisateur/helloworld/actions)
+- [Codemagic (iOS)](https://codemagic.io/app/your-app-id)
