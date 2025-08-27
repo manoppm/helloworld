@@ -1,32 +1,28 @@
-# Dart/Flutter
-**.dart_tool/
+# Flutter/Dart
+**/doc/api/
+.dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.pub-cache/
 .pub/
 /build/
-/android/.gradle/
-/android/app/build/
-/android/app/.idea/
-/android/app/**/debug/
-/android/app/**/profile/
+/android/app/helloworld-keystore.jks
+
+# Android
+**/android/**/build/
+**/android/**/local.properties
+**/android/**/*.keystore
+**/android/**/key.properties
 
 # iOS
-/ios/Pods/
-/ios/.symlinks/
-/ios/Flutter/App.framework
-/ios/Flutter/Flutter.framework
-/ios/Flutter/Generated.xcconfig
-/ios/Flutter/app.flx
-/ios/Flutter/app.zip
-/ios/Flutter/Flutter.podspec
-/ios/ServiceDefinitions.json
-/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/DerivedData/
+**/ios/**/Pods/
+**/ios/**/.symlinks/
 
 # IDE
 .idea/
-.vscode/
 *.swp
-*.lock
-
-# Environnement
-.env
+*.swo

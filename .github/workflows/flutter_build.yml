@@ -1,44 +1,54 @@
-name: Build & Sign APK
+name: Flutter CI/CD - Build & Sign APK
 
 on:
   push:
     branches: [ main ]
 
+env:
+  FLUTTER_VERSION: "3.19.5"
+  JAVA_VERSION: "17"
+  JAVA_DISTRIBUTION: "temurin"
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: \${{ env.JAVA_DISTRIBUTION }}
+          java-version: \${{ env.JAVA_VERSION }}
+          cache: 'gradle'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.5'
+          flutter-version: \${{ env.FLUTTER_VERSION }}
+          cache: true
 
-      - name: Create keystore directory
-        run: mkdir -p android/app
-
-      - name: Create keystore file
+      - name: Create Android directories
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/helloworld-keystore.jks
+          mkdir -p android/app/src/main/kotlin/com/example/helloworld
+          mkdir -p android/app/src/main/java/com/example/helloworld
 
-      - name: Install dependencies
+      - name: Decode and place keystore
+        run: |
+          echo "\${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/helloworld-keystore.jks
+          chmod 644 android/app/helloworld-keystore.jks
+
+      - name: Get dependencies
         run: flutter pub get
 
       - name: Build APK
         run: flutter build apk --release
         env:
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEYSTORE_PATH: android/app/helloworld-keystore.jks  # ← Chemin corrigé
+          ANDROID_KEY_ALIAS: \${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: \${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEYSTORE_PASSWORD: \${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEYSTORE_PATH: android/app/helloworld-keystore.jks
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
