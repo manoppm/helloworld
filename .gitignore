@@ -30,3 +30,7 @@ android/key.properties
 android/app/*.jks
 *.jks
 keystore.base64
+android/key.properties
+android/app/*.jks
+*.jks
+keystore.base64
