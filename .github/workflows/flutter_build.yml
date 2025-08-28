@@ -46,8 +46,10 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
+            - name: Recreate project files
+        run: flutter create .
+
       - name: Build APK
-        working-directory: ./android
         run: flutter build apk --release --verbose
 
       - name: Upload APK

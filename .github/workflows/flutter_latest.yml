@@ -31,10 +31,8 @@ jobs:
     - run: flutter pub get
     - name: Accept Android licenses
       run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
-    - name: Flutter doctor
-      run: flutter doctor -v
-    - name: List files in android directory
-      run: ls -R android
+    - name: Recreate project files
+      run: flutter create .
     - run: flutter build apk --debug
     
     - uses: actions/upload-artifact@v4
