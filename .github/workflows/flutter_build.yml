@@ -43,10 +43,7 @@ jobs:
       - name: Accept Android licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
-      - name: Flutter doctor
-        run: flutter doctor -v
-
-            - name: Recreate project files
+      - name: Recreate project files
         run: flutter create .
 
       - name: Build APK

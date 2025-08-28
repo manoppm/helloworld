@@ -27,10 +27,6 @@ jobs:
         packages: platforms;android-34 build-tools;34.0.0 platform-tools
         accept-android-sdk-licenses: true
         
-    - run: flutter --version
-    - run: flutter pub get
-    - name: Accept Android licenses
-      run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
     - name: Recreate project files
       run: flutter create .
     - run: flutter build apk --debug
