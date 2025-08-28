@@ -29,6 +29,8 @@ jobs:
         
     - run: flutter --version
     - run: flutter pub get
+    - name: Accept Android licenses
+      run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
     - run: flutter build apk --debug
     
     - uses: actions/upload-artifact@v4
