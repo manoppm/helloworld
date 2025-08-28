@@ -46,10 +46,8 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
-      - name: List files in android directory
-        run: ls -R android
-
       - name: Build APK
+        working-directory: ./android
         run: flutter build apk --release --verbose
 
       - name: Upload APK
