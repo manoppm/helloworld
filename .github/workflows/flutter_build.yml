@@ -27,7 +27,7 @@ jobs:
         with:
           cmdline-tools-version: '9477386'
           packages: platforms;android-34 build-tools;34.0.0 platform-tools
-          accept-android-sdk-licenses: 'yes'
+          accept-android-sdk-licenses: true
 
       - name: Create key.properties
         run: |
@@ -45,6 +45,9 @@ jobs:
 
       - name: Flutter doctor
         run: flutter doctor -v
+
+      - name: List files in android directory
+        run: ls -R android
 
       - name: Build APK
         run: flutter build apk --release --verbose
