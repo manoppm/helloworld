@@ -1,71 +1,38 @@
-# Instructions pour l'installation de l'application iOS
+# Instructions pour l'installation de l'application iOS via Codemagic
 
-Ce fichier décrit les étapes nécessaires pour installer l'application sur un iPhone.
+Ce fichier décrit les étapes nécessaires pour compiler et installer l'application sur un iPhone en utilisant le service de CI/CD Codemagic, sans avoir besoin d'un Mac localement.
 
 ## Prérequis
 
 1.  **Compte développeur Apple** : Vous devez être inscrit au [programme pour développeurs Apple](https://developer.apple.com/programs/).
-2.  **Xcode** : Xcode doit être installé sur votre Mac.
-3.  **Appareil enregistré** : Votre iPhone doit être enregistré comme appareil de test dans votre compte développeur Apple.
+2.  **Compte Codemagic** : Vous devez avoir un compte sur [Codemagic](https://codemagic.io).
+3.  **Dépôt Git** : Le code du projet doit être hébergé sur un fournisseur Git (GitHub, GitLab, Bitbucket) connecté à votre compte Codemagic.
 
 ## Étapes
 
-### 1. Configuration de la signature du code dans Xcode
+### 1. Configuration de l'application dans Codemagic
 
-1.  Ouvrez le projet iOS dans Xcode :
-    ```bash
-    open ios/Runner.xcworkspace
-    ```
-2.  Sélectionnez `Runner` dans le navigateur de projet à gauche.
-3.  Allez à l'onglet `Signing & Capabilities`.
-4.  Sélectionnez votre équipe de développeur (Team).
-5.  Assurez-vous que `Automatically manage signing` est coché. Xcode devrait gérer la création des certificats et des profils de provisionnement pour vous.
+1.  Connectez-vous à votre compte Codemagic.
+2.  Ajoutez une nouvelle application et sélectionnez le dépôt Git de ce projet.
+3.  Codemagic détectera automatiquement le fichier `codemagic.yaml` à la racine du projet, qui contient la configuration de build.
 
-### 2. Construction de l'application
+### 2. Configuration de la signature du code (Code Signing)
 
-Vous pouvez construire l'application de deux manières :
+C'est l'étape la plus importante pour autoriser l'installation sur votre appareil.
 
-#### a) Avec le script `build_ios.sh`
+1.  Dans les paramètres de votre application sur Codemagic, naviguez vers l'onglet **"Code signing"**.
+2.  Vous devrez téléverser vos informations de signature Apple :
+    *   **Certificat de Distribution** (un fichier `.p12`).
+    *   **Profil de Provisionnement** (un fichier `.mobileprovision`) qui inclut l'UDID de votre iPhone.
+3.  Codemagic stocke ces fichiers de manière sécurisée. Pour des instructions détaillées, consultez la [documentation de Codemagic sur la signature de code iOS](https://docs.codemagic.io/code-signing/ios-code-signing/).
 
-J'ai créé un script `build_ios.sh` qui exécute la commande de construction pour vous.
+### 3. Lancement de la compilation (Build)
 
-Pour l'utiliser, rendez-le d'abord exécutable :
-```bash
-chmod +x build_ios.sh
-```
+1.  Une fois la signature configurée, cliquez sur le bouton **"Start new build"** sur la page de votre application.
+2.  Sélectionnez le workflow `iOS Build` (défini dans `codemagic.yaml`) et lancez la compilation.
 
-Puis, exécutez-le :
-```bash
-./build_ios.sh
-```
+### 4. Installation de l'application
 
-Cette commande va créer un fichier `.ipa` dans le dossier `build/ios/ipa/`.
-
-#### b) Manuellement avec Flutter
-
-Vous pouvez également exécuter la commande de construction manuellement :
-```bash
-flutter build ipa
-```
-
-### 3. Installation de l'application
-
-Une fois que vous avez le fichier `.ipa`, vous avez deux options principales pour l'installer :
-
-#### a) TestFlight (Recommandé)
-
-1.  Allez sur [App Store Connect](https://appstoreconnect.apple.com/) et connectez-vous.
-2.  Allez dans la section `Mes apps` et sélectionnez votre application.
-3.  Allez dans l'onglet `TestFlight`.
-4.  Téléversez le fichier `.ipa` que vous avez créé. Vous pouvez utiliser l'application `Transporter` sur votre Mac pour cela.
-5.  Une fois le téléversement et le traitement terminés, vous pouvez vous ajouter comme testeur interne et installer l'application via l'application TestFlight sur votre iPhone.
-
-#### b) Ad Hoc
-
-1.  Dans votre compte développeur Apple, créez un profil de provisionnement "Ad Hoc" qui inclut l'UDID de votre iPhone.
-2.  Téléchargez ce profil et installez-le dans Xcode.
-3.  Configurez le projet Xcode pour utiliser ce profil de provisionnement pour les builds "Release".
-4.  Construisez l'application comme décrit à l'étape 2.
-5.  Utilisez Apple Configurator 2 ou Xcode pour installer manuellement le fichier `.ipa` sur votre iPhone.
-
-Pour des instructions plus détaillées, consultez la [documentation officielle de Flutter](https://docs.flutter.dev/deployment/ios).
+1.  Une fois la compilation terminée avec succès, Codemagic enverra un e-mail à l'adresse configurée dans le fichier `codemagic.yaml`.
+2.  Ouvrez cet e-mail depuis votre iPhone.
+3.  Cliquez sur le lien d'installation pour télécharger et installer l'application directement sur votre appareil.
